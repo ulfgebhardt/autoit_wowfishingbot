@@ -1,6 +1,6 @@
 ;VERSION:
 ;	Name:           Xfish version 3.1
-; 	Language:       English 
+; 	Language:       English
 ; 	Platform:       WinXP, Win2k
 ; 	Author:         xeonz16 (base version)
 ;	  		  		berzerkwolf(some tuning changes and added lure function);He is a boon and knows nothing
@@ -58,7 +58,7 @@
 ;
 ;		And deviate fish + deviate scales in the oasis's scattered around the barrens.
 ;
-;		When you catch these fish, you need to sell them to PLAYERS, namely alchemists...they won't 
+;		When you catch these fish, you need to sell them to PLAYERS, namely alchemists...they won't
 ;		get you crap from merchants.
 ;
 ;	Choose the right fishing spot:
@@ -89,7 +89,7 @@
 ;		time to time and look if someone whispered. Answer these whispers to avoid being detected.
 ;
 ;		Also there were some stupid ideas of bezerkwolf to prevent detection:
-;		
+;
 ;			-Extract this files to an unusual folder (like "windows folder system32 etc); -> Not needed till now (patch 2.4.1)
 ;			-Also he added a random timer function which started the fishing after a random time; -> As long blizzard do not
 ;			 analyse gamedata this is not nessecarry and only waste of time. Also if there would be a gameanalysis used by
@@ -132,12 +132,12 @@
 ;
 ;ADVANCED TROUBLESHOOTING:
 ;	Still no boober detected:
-;		For trouble finding the bobber notice there are several definitions of $feather commented out 
+;		For trouble finding the bobber notice there are several definitions of $feather commented out
 ;		comment out the current one and use another, and then retry adjusting variances
 ;		Also look at "Choose the right fishing spot:" in "HINTS"
 ;
 ;	Splashes are not detected right:
-;		there are two pixelsearchs for splash, one uses $day and another uses $night, you can 
+;		there are two pixelsearchs for splash, one uses $day and another uses $night, you can
 ;		easily switch between night- and daymode in the wait_for_bite() function
 ;
 ;		You can also adjust the $s_offset. This determines how many pixels in each direction
@@ -184,19 +184,15 @@
 ;		-Autoexit if Window is no longer in focus.
 ;
 
-
-;Includes
-#Include <_ArraySize.au3>
-
 ;OPTIONS:
 	;WindowOptions:
 	$windowed_mode 				= 0 		;If u run the bot in windowmode set windowed_mode to 1, else to 0.
-	$game_res_x 				= 1600 		;Only nessecary if u are in wondowed_mode!
-	$game_res_y 				= 1050  		;Only nessecary if u are in wondowed_mode!
-	$search_area_space_left 	= 400 		;Pixels from the left  , wherin the feather is not searched; pixels are counted within the wow-window
-	$search_area_space_right 	= 400 		;Pixels from the right , wherin the feather is not searched; pixels are counted within the wow-window
-	$search_area_space_top 		= 200 		;Pixels from the top   , wherin the feather is not searched; pixels are counted within the wow-window
-	$search_area_space_bottom	= 600 		;Pixels from the bottom, wherin the feather is not searched; pixels are counted within the wow-window
+	$game_res_x 				= 1920 		;Only nessecary if u are in wondowed_mode!
+	$game_res_y 				= 1080  		;Only nessecary if u are in wondowed_mode!
+	$search_area_space_left 	= 500 		;Pixels from the left  , wherin the feather is not searched; pixels are counted within the wow-window
+	$search_area_space_right 	= 500 		;Pixels from the right , wherin the feather is not searched; pixels are counted within the wow-window
+	$search_area_space_top 		= 250 		;Pixels from the top   , wherin the feather is not searched; pixels are counted within the wow-window
+	$search_area_space_bottom	= 250 		;Pixels from the bottom, wherin the feather is not searched; pixels are counted within the wow-window
 
 	;GameOptions:
 	$fishing_hotkey 			= "1" 		;Key for the fishingrod on ur hotkeybar
@@ -213,35 +209,35 @@
 	$char_mainhandslot_y		= 600
 	$use_internal_loot			= 1			;Determin if the bot should loot everything (set to 1) or set to 0 if you have an autoloot-addon
 	$feather_disapear			= 4500		;How long should it wait til old feather disapeared
-	
+
 	$lag_offset					= 150		;This is a latency offset. If you have a hight ping you should increase this value. The value is in milliseconds.
 											;You should set this offset at least at 100-200 to enable your lure to be added at the right time!
-	
+
 	;ColorOptions:
-	$splash_day 				= 0xFFFFFF;0xF6F6F6	;splash color day 
-	$splash_night 				= 0xFFFFFF	;splash color night 
-	;othersplash				= 0xA2A67D	;some other splashcodes 
-	;othersplash				= 0xC1AD7A 
-	;othersplash				= 0xD0C08D 
-	dim $feathers[6]
-	$feathers[0] 				= 0xBFA67B  ;day -- pole
-	$feathers[1]				= 0xBD5C27	;night --bright red 
-	$feathers[2]				= 0x31314E	;day --blue feather
-	$feathers[3]				= 0x1A130F	;night --dark dark red 
-	$feathers[4]				= 0xC33415	;day --bright red 
-	$feathers[5]				= 0x8F825B	;day -- pole
+	$splash_day 				= 0xFFFFFF;0xF6F6F6	;splash color day
+	$splash_night 				= 0xFFFFFF	;splash color night
+	;othersplash				= 0xA2A67D	;some other splashcodes
+	;othersplash				= 0xC1AD7A
+	;othersplash				= 0xD0C08D
+	dim $feathers[1]
+	;$feathers[0] 				= 0xBFA67B  ;day -- pole
+	;$feathers[1]				= 0xBD5C27	;night --bright red
+	$feathers[0]				= 0x31314E	;day --blue feather
+	;$feathers[3]				= 0x1A130F	;night --dark dark red
+    ;$feathers[4]				= 0xC33415	;day --bright red
+	;$feathers[5]				= 0x8F825B	;day -- pole
 
 	;SearchParameters:
-	$feather_color_variance 	= 15		;range of accepted values differing from original code for feather 
-	$splash_color_variance 		= 5			;range of accepted values differing from original code for splash 
-	$step 						= 1			;1 = search every pixel, 2 = search every other pixel...etc don't put higher then like 5 
-	$s_offset 					= 25		;search offset, basically how large an area to search around the feather for splash 
+	$feather_color_variance 	= 15		;range of accepted values differing from original code for feather
+	$splash_color_variance 		= 5			;range of accepted values differing from original code for splash
+	$step 						= 1			;1 = search every pixel, 2 = search every other pixel...etc don't put higher then like 5
+	$s_offset 					= 25		;search offset, basically how large an area to search around the feather for splash
 
 	;Debug:
-	$debug 					= 0			;set this to 1 to view GUI messages, so you can tell where the bot gets hung up 
+	$debug 						= 0			;set this to 1 to view GUI messages, so you can tell where the bot gets hung up
 											;but turn it to zero once the bot is working, and the bot will 'last' for DAYS
 											;as compared to maybe 4-5 hours with GUI on.
-										
+
 ;Begin of plain code
 dim $feather_cord ;Feather-position var
 
@@ -260,100 +256,99 @@ main();start the main func
 
 func main()
 	print_log("Started Main-Loop")
-	
+
 	win_focus_check();
-	
+
 	$search_status = 0
 	$time = 0
-	
+
 	if $use_lure = 1 then ;Luresupport
 		if TimerDiff($timer_lure) >= $fishing_lure_time+$lag_offset then
 			equip_lure();equip the lur to the rod with makro.
 			$timer_lure = Timerinit();restart the timer.
 		endif
 	endif
-	
+
 	start_fishing() ;throw the rod
 	$timer = Timerinit();start timer
-	
+
 	while $time <= $timer_fishing+$lag_offset; restarts the loop after 21 sec
-		
+
 		$time = TimerDiff($timer);timerconrtroll
-		
+
 		if $search_status = 0 then
-			print_log("Searching for feather...")
+			;print_log("Searching for feather...")
 			if search_feather($feathers) = 1 then
 				$search_status = 1 ; Feather found
 			endif
 		endif
-		
+
 		if $search_status = 1 then
 			print_log("Waiting for bite...")
 			if wait_for_bite() = 1 then
 				main() ;exitloop ;Fish found and looted -> restart loop
 			endif
 		endif
-		
+
 		win_focus_check();
-			
+
 	wend
 
 	main();restart main func
-	
+
 endfunc
 
 func win_focus_check()
 	if WinActive("World of Warcraft") == 0 then
-		MsgBox(0,"WoW Fishing Info","Info: Bot will exit after this Message, cause the right Window was never/nolonger active! Restart the bot manually!")	
+		MsgBox(0,"WoW Fishing Info","Info: Bot will exit after this Message, cause the right Window was never/nolonger active! Restart the bot manually!")
 		exit
 	endif
-endfunc 
+endfunc
 
 func search_feather($feathers)
-		
+
     ;find where the feather is located
-	
-	for $i = 0 to _ArraySize($feathers)-1
+	for $i = 0 to UBound($feathers)-1
 		print_log("Search Feather " + $i)
 		if $windowed_mode = 0 then		 ;left;top;right;bottom
 			$feather_cord = PixelSearch (	$search_area_space_left, $search_area_space_top, @DesktopWidth- $search_area_space_right, @DesktopHeight -  $search_area_space_bottom, $feathers[$i], $feather_color_Variance, $step)
 		else
-			$feather_cord = PixelSearch (	((@DesktopWidth - $game_res_x) / 2) + $search_area_space_left, ((@DesktopHeight - $game_res_y) / 2) + $search_area_space_top, @DesktopWidth - (((@DesktopWidth - $game_res_x) / 2) - $search_area_space_right), @DesktopHeight - (((@DesktopHeight - $game_res_y) / 2) - $search_area_space_bottom), $feathers[$i], $feather_color_Variance, $step) 
+			$feather_cord = PixelSearch (	((@DesktopWidth - $game_res_x) / 2) + $search_area_space_left, ((@DesktopHeight - $game_res_y) / 2) + $search_area_space_top, @DesktopWidth - (((@DesktopWidth - $game_res_x) / 2) - $search_area_space_right), @DesktopHeight - (((@DesktopHeight - $game_res_y) / 2) - $search_area_space_bottom), $feathers[$i], $feather_color_Variance, $step)
 		endif
-										
-		if NOT @error = 1 then 
-		   print_log("Found Something.") 
+
+		if NOT @error = 1 then
+		   print_log("Found Something.")
 		   ;PServer Debug:
 		   $feather_cord[0] = $feather_cord[0]
 		   $feather_cord[1] = $feather_cord[1] + 6
-		   
+
 		   mousemove($feather_cord[0], $feather_cord[1]);move mouse to feather  ;no need to move the mouse at this time - there will be plenty time later - but for orientating its quite usefull
 		   return 1
 	   endif
-	   
-	   seterror(2);resets @error macro so it doesn't fire next loop 
+
+	   seterror(2);resets @error macro so it doesn't fire next loop
 	next
 
 	return 0
 endfunc
 
 func wait_for_bite()
-	
-	if $day = 1 then  
+
+	if $day = 1 then
 		$splash = $splash_day
 	else
 		$splash = $splash_night
 	endif
-	
+
 						;left;top;right;bottom
-	$sp = Pixelsearch($feather_cord[0] - $s_offset, $feather_cord[1] - $s_offset, $feather_cord[0] + $s_offset, $feather_cord[1] + $s_offset, $splash, $splash_color_variance) 					  
-	if ubound($sp) > 1 then;if $sp returns cords then shift + rightclick, discards $sp cords 
-		seterror(2) ;resets @error macro so it doesn't fire next loop 
+	$sp = Pixelsearch($feather_cord[0] - $s_offset, $feather_cord[1] - $s_offset, $feather_cord[0] + $s_offset, $feather_cord[1] + $s_offset, $splash, $splash_color_variance)
+	if ubound($sp) > 1 then;if $sp returns cords then shift + rightclick, discards $sp cords
+		seterror(2) ;resets @error macro so it doesn't fire next loop
 		print_log("Fish!")
 		loot() ;loot fish
 		return 1
-	endif 
-	
+	endif
+
 	return 0
 endfunc
 
@@ -363,21 +358,21 @@ func start_fishing()
 	sleep($feather_disapear) ;Wait for the old feather to disapear
 endfunc
 
-func loot()	
+func loot()
 	print_log("Loot Fish")
-	
+
 	sleep(300) ;Some debugging
-	
+
 	if $use_internal_loot = 1 then ;internal loot
 		send("{shiftdown}") ;Activate shift to loot everything
-	endif 
-	
+	endif
+
 	sleep(750)
     mouseclick("right", $feather_cord[0], $feather_cord[1], 1, 1) ;Rightklick on Featherposition, which was located in search_feather()
     sleep(750) ;Wait till lootwindow opens
-	
+
 	if $use_internal_loot = 1 then ;internal loot
-		send("{shiftup}")	
+		send("{shiftup}")
 	endif
 endfunc
 
@@ -406,8 +401,8 @@ func equip_lure()
 endfunc
 
 func print_log($message)
-;this func just updates splash message if the variable $debug is set to '1' in the beginning		
-	if $debug = 1 then 
-		SplashTextOn( "", $message , 100 , 100 ,1 ,1 , 17) 
-	endif 
+;this func just updates splash message if the variable $debug is set to '1' in the beginning
+	if $debug = 1 then
+		SplashTextOn( "", $message , 100 , 100 ,1 ,1 , 17)
+	endif
 endfunc
